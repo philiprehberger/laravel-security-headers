@@ -92,9 +92,12 @@ return [
         'nonce_view_variable'     => 'cspNonce',
         'nonce_request_attribute' => 'csp_nonce',
 
+        'unsafe_eval'  => true,   // include 'unsafe-eval' in script-src
+        'unsafe_inline' => true,  // include 'unsafe-inline' in style-src
+
         // Extra sources merged into each directive
-        'script_src'   => [],   // appended to: 'self' 'nonce-...' 'unsafe-eval'
-        'style_src'    => [],   // appended to: 'self' 'unsafe-inline'
+        'script_src'   => [],   // appended to: 'self' 'nonce-...' (+ 'unsafe-eval' if enabled)
+        'style_src'    => [],   // appended to: 'self' (+ 'unsafe-inline' if enabled)
         'img_src'      => [],   // appended to: 'self' data: blob:
         'font_src'     => [],   // appended to: 'self' data:
         'connect_src'  => [],   // appended to: 'self'
@@ -116,6 +119,29 @@ return [
 
 ];
 ```
+
+## Hardening the CSP
+
+By default, `'unsafe-eval'` is included in `script-src` and `'unsafe-inline'` is included in `style-src` for broad compatibility. You can disable these for stricter security:
+
+```php
+'csp' => [
+    'unsafe_eval'   => false,  // removes 'unsafe-eval' from script-src
+    'unsafe_inline' => false,  // removes 'unsafe-inline' from style-src
+],
+```
+
+When `unsafe_inline` is disabled, all inline styles must use the CSP nonce. When `unsafe_eval` is disabled, `eval()` and related JavaScript features are blocked.
+
+### Hardcoded CSP Directives
+
+The following directives are always included and cannot be changed via config:
+
+| Directive | Value | Purpose |
+|-----------|-------|---------|
+| `default-src` | `'self'` | Fallback for all resource types |
+| `base-uri` | `'self'` | Prevents `<base>` tag hijacking |
+| `object-src` | `'none'` | Blocks Flash/Java embeds |
 
 ## Customization Examples
 

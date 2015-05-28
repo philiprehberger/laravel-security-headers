@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-03-12
+
+### Added
+- Configurable `unsafe_eval` option to toggle `'unsafe-eval'` in `script-src` (default `true`)
+- Configurable `unsafe_inline` option to toggle `'unsafe-inline'` in `style-src` (default `true`)
+- Documentation for hardcoded CSP directives (`default-src`, `base-uri`, `object-src`)
+- 14 new tests covering CSP directive toggles, Vite dev server, frame-ancestors, form-action, style-src, font-src, HSTS options, base-uri, and object-src
+
 ## [1.0.0] - 2026-03-05
 
 ### Added

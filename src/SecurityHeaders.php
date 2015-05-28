@@ -109,13 +109,17 @@ class SecurityHeaders
 
         $directives = [
             "default-src 'self'",
-            "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval'".$viteOrigin.$extraScript,
-            "style-src 'self' 'unsafe-inline'".$viteOrigin.$extraStyle,
+            "script-src 'self' 'nonce-{$nonce}'"
+                .(config('security-headers.csp.unsafe_eval', true) ? " 'unsafe-eval'" : '')
+                .$viteOrigin.$extraScript,
+            "style-src 'self'"
+                .(config('security-headers.csp.unsafe_inline', true) ? " 'unsafe-inline'" : '')
+                .$viteOrigin.$extraStyle,
             "img-src 'self' data: blob:".$extraImg,
             "font-src 'self' data:".$extraFont,
             "connect-src 'self'".$viteOrigin.$viteWs.$extraConnect,
-            'frame-ancestors'.' '.$frameAncestors,
-            'form-action'.' '.$formAction,
+            'frame-ancestors'.$frameAncestors,
+            'form-action'.$formAction,
             "base-uri 'self'",
             "object-src 'none'",
         ];
