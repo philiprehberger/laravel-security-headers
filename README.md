@@ -195,11 +195,13 @@ SECURITY_HEADERS_HSTS=true
 'x_xss_protection' => null,
 ```
 
-## Running the Tests
+## Development
 
 ```bash
 composer install
 vendor/bin/phpunit
+vendor/bin/pint --test
+vendor/bin/phpstan analyse
 ```
 
 ## License
