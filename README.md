@@ -2,10 +2,16 @@
 
 [![Tests](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/laravel-security-headers.svg)](https://packagist.org/packages/philiprehberger/laravel-security-headers)
-[![PHP Version Require](https://img.shields.io/packagist/php-v/philiprehberger/laravel-security-headers.svg)](https://packagist.org/packages/philiprehberger/laravel-security-headers)
 [![License](https://img.shields.io/github/license/philiprehberger/laravel-security-headers)](LICENSE)
 
 A Laravel middleware package that adds a comprehensive set of HTTP security headers to every response, including a per-request CSP nonce, HSTS, and Permissions-Policy.
+
+## Requirements
+
+| Dependency | Version         |
+|------------|-----------------|
+| PHP        | ^8.2            |
+| Laravel    | 11 or 12        |
 
 ## Features
 
@@ -195,6 +201,30 @@ SECURITY_HEADERS_HSTS=true
 'x_xss_protection' => null,
 ```
 
+## API
+
+### Middleware
+
+| Class | Description |
+|-------|-------------|
+| `SecurityHeaders` | Middleware that injects all configured security headers into each response and generates a per-request CSP nonce |
+
+### Service Provider
+
+Auto-discovered via Laravel's package discovery. Registers the middleware and publishes the config file.
+
+### Blade Variable
+
+| Variable | Description |
+|----------|-------------|
+| `$cspNonce` | Per-request CSP nonce shared to all Blade views (name configurable via `csp.nonce_view_variable`) |
+
+### Request Attribute
+
+| Attribute | Description |
+|-----------|-------------|
+| `csp_nonce` | Per-request CSP nonce accessible via `$request->attributes->get('csp_nonce')` |
+
 ## Development
 
 ```bash
@@ -206,5 +236,5 @@ vendor/bin/phpstan analyse
 
 ## License
 
-MIT License. Copyright (c) 2026 [Philip Rehberger](mailto:me@philiprehberger.com).
+MIT
 
