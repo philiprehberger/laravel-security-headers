@@ -4,7 +4,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/laravel-security-headers.svg)](https://packagist.org/packages/philiprehberger/laravel-security-headers)
 [![License](https://img.shields.io/github/license/philiprehberger/laravel-security-headers)](LICENSE)
 
-A Laravel middleware package that adds a comprehensive set of HTTP security headers to every response, including a per-request CSP nonce, HSTS, and Permissions-Policy.
+Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy.
 
 ## Requirements
 
