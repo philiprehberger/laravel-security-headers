@@ -11,7 +11,7 @@ Laravel middleware for comprehensive security headers including CSP with nonce s
 - PHP 8.2+
 - Laravel 11 or 12
 
-## Features
+### Features
 
 - Per-request CSP nonce — generated automatically and shared with all Blade views
 - Content Security Policy built entirely from config arrays, no code changes required
