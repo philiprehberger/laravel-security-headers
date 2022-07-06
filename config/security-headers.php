@@ -36,6 +36,10 @@ return [
     'csp' => [
         'enabled' => true,
 
+        // When true, sends Content-Security-Policy-Report-Only instead of
+        // Content-Security-Policy, allowing you to test policies without enforcement.
+        'report_only' => false,
+
         // Name of the Blade / View variable that holds the nonce
         'nonce_view_variable' => 'cspNonce',
 

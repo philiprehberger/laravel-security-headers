@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-22
+
+### Added
+- `CspDirective` backed string enum with cases for common CSP directive names
+- `report_only` config option (default `false`) — when `true`, sends `Content-Security-Policy-Report-Only` header instead of `Content-Security-Policy`
+- Tests for `CspDirective` enum values, Report-Only header output, and normal CSP header when `report_only` is disabled
+
 ## [1.1.7] - 2026-03-23
 
 ### Fixed

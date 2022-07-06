@@ -100,6 +100,7 @@ return [
 
     'csp' => [
         'enabled'                 => true,
+        'report_only'             => false,  // send Report-Only header instead of enforcing
         'nonce_view_variable'     => 'cspNonce',
         'nonce_request_attribute' => 'csp_nonce',
 
@@ -195,6 +196,25 @@ The following directives are always included and cannot be changed via config:
 SECURITY_HEADERS_HSTS=true
 ```
 
+#### Enable Report-Only mode to test your CSP without enforcing it
+
+```php
+'csp' => [
+    'report_only' => true,
+],
+```
+
+When `report_only` is `true`, the middleware sends `Content-Security-Policy-Report-Only` instead of `Content-Security-Policy`. This lets browsers report violations without blocking resources, which is useful when rolling out a new policy.
+
+#### Use the CspDirective enum for type-safe directive names
+
+```php
+use PhilipRehberger\SecurityHeaders\CspDirective;
+
+$directive = CspDirective::ScriptSrc; // 'script-src'
+$directive = CspDirective::from('style-src'); // CspDirective::StyleSrc
+```
+
 #### Remove a header you do not need
 
 ```php
@@ -208,6 +228,12 @@ SECURITY_HEADERS_HSTS=true
 | Class | Description |
 |-------|-------------|
 | `SecurityHeaders` | Middleware that injects all configured security headers into each response and generates a per-request CSP nonce |
+
+### Enums
+
+| Enum | Description |
+|------|-------------|
+| `CspDirective` | Backed string enum with cases for common CSP directives (`DefaultSrc`, `ScriptSrc`, `StyleSrc`, `ImgSrc`, `FontSrc`, `ConnectSrc`, `MediaSrc`, `FrameSrc`, `BaseUri`, `FormAction`) |
 
 ### Service Provider
 

@@ -7,6 +7,7 @@ namespace PhilipRehberger\SecurityHeaders\Tests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Orchestra\Testbench\TestCase;
+use PhilipRehberger\SecurityHeaders\CspDirective;
 use PhilipRehberger\SecurityHeaders\SecurityHeaders;
 use PhilipRehberger\SecurityHeaders\SecurityHeadersServiceProvider;
 
@@ -363,5 +364,66 @@ class SecurityHeadersTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
 
         $this->assertStringContainsString("object-src 'none'", $csp);
+    }
+
+    // ---------------------------------------------------------------------------
+    // CspDirective enum
+    // ---------------------------------------------------------------------------
+
+    public function test_csp_directive_enum_values(): void
+    {
+        $this->assertSame('default-src', CspDirective::DefaultSrc->value);
+        $this->assertSame('script-src', CspDirective::ScriptSrc->value);
+        $this->assertSame('style-src', CspDirective::StyleSrc->value);
+        $this->assertSame('img-src', CspDirective::ImgSrc->value);
+        $this->assertSame('font-src', CspDirective::FontSrc->value);
+        $this->assertSame('connect-src', CspDirective::ConnectSrc->value);
+        $this->assertSame('media-src', CspDirective::MediaSrc->value);
+        $this->assertSame('frame-src', CspDirective::FrameSrc->value);
+        $this->assertSame('base-uri', CspDirective::BaseUri->value);
+        $this->assertSame('form-action', CspDirective::FormAction->value);
+    }
+
+    public function test_csp_directive_enum_is_backed_string(): void
+    {
+        $directive = CspDirective::from('script-src');
+
+        $this->assertSame(CspDirective::ScriptSrc, $directive);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Report-Only mode
+    // ---------------------------------------------------------------------------
+
+    public function test_csp_report_only_header_when_enabled(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.report_only' => true,
+        ]);
+
+        $this->assertNotNull($response->headers->get('Content-Security-Policy-Report-Only'));
+        $this->assertNull($response->headers->get('Content-Security-Policy'));
+    }
+
+    public function test_csp_normal_header_when_report_only_disabled(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.report_only' => false,
+        ]);
+
+        $this->assertNotNull($response->headers->get('Content-Security-Policy'));
+        $this->assertNull($response->headers->get('Content-Security-Policy-Report-Only'));
+    }
+
+    public function test_csp_report_only_contains_policy_directives(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.report_only' => true,
+        ]);
+
+        $csp = $response->headers->get('Content-Security-Policy-Report-Only');
+
+        $this->assertStringContainsString("default-src 'self'", $csp);
+        $this->assertStringContainsString("script-src 'self'", $csp);
     }
 }
