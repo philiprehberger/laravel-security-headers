@@ -11,16 +11,6 @@ Laravel middleware for comprehensive security headers including CSP with nonce s
 - PHP 8.2+
 - Laravel 11 or 12
 
-### Features
-
-- Per-request CSP nonce — generated automatically and shared with all Blade views
-- Content Security Policy built entirely from config arrays, no code changes required
-- Configurable HSTS with `max_age` and `includeSubDomains`
-- `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, `Permissions-Policy`
-- Vite dev-server auto-detection adds the HMR origin and WebSocket URLs to the CSP when `APP_ENV=local`
-- Any header can be suppressed by setting its config value to `null`
-- Laravel 11 and 12 support, PHP 8.2+
-
 ## Installation
 
 ```bash
