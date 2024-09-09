@@ -2,8 +2,7 @@
 
 [![Tests](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/laravel-security-headers.svg)](https://packagist.org/packages/philiprehberger/laravel-security-headers)
-[![License](https://img.shields.io/github/license/philiprehberger/laravel-security-headers)](LICENSE)
-[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
+[![Last updated](https://img.shields.io/github/last-commit/philiprehberger/laravel-security-headers)](https://github.com/philiprehberger/laravel-security-headers/commits/main)
 
 Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy.
 
@@ -251,7 +250,24 @@ vendor/bin/pint --test
 vendor/bin/phpstan analyse
 ```
 
+## Support
+
+If you find this project useful:
+
+⭐ [Star the repo](https://github.com/philiprehberger/laravel-security-headers)
+
+🐛 [Report issues](https://github.com/philiprehberger/laravel-security-headers/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+💡 [Suggest features](https://github.com/philiprehberger/laravel-security-headers/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+❤️ [Sponsor development](https://github.com/sponsors/philiprehberger)
+
+🌐 [All Open Source Projects](https://philiprehberger.com/open-source-packages)
+
+💻 [GitHub Profile](https://github.com/philiprehberger)
+
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/philiprehberger)
+
 ## License
 
-MIT
-
+[MIT](LICENSE)
