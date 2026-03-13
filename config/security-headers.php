@@ -42,6 +42,12 @@ return [
         // Name of the Request attribute that holds the nonce
         'nonce_request_attribute' => 'csp_nonce',
 
+        // Whether to include 'unsafe-eval' in script-src (default true for compatibility)
+        'unsafe_eval' => true,
+
+        // Whether to include 'unsafe-inline' in style-src (default true for compatibility)
+        'unsafe_inline' => true,
+
         // Extra sources appended to script-src (nonce + 'self' + 'unsafe-eval' always included)
         'script_src' => [],
 

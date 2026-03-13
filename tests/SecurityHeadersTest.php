@@ -205,4 +205,163 @@ class SecurityHeadersTest extends TestCase
         $this->assertNull($response->headers->get('Referrer-Policy'));
         $this->assertNull($response->headers->get('Permissions-Policy'));
     }
+
+    // ---------------------------------------------------------------------------
+    // unsafe-eval / unsafe-inline toggles
+    // ---------------------------------------------------------------------------
+
+    public function test_csp_includes_unsafe_eval_by_default(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("'unsafe-eval'", $csp);
+    }
+
+    public function test_csp_excludes_unsafe_eval_when_disabled(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.unsafe_eval' => false,
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringNotContainsString("'unsafe-eval'", $csp);
+    }
+
+    public function test_csp_includes_unsafe_inline_by_default(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("'unsafe-inline'", $csp);
+    }
+
+    public function test_csp_excludes_unsafe_inline_when_disabled(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.unsafe_inline' => false,
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringNotContainsString("'unsafe-inline'", $csp);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Vite dev server in local environment
+    // ---------------------------------------------------------------------------
+
+    public function test_vite_dev_server_added_in_local_env(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'app.env' => 'local',
+            'security-headers.vite.enabled' => true,
+            'security-headers.vite.dev_server' => 'http://127.0.0.1:5173',
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('http://127.0.0.1:5173', $csp);
+    }
+
+    public function test_vite_ws_origins_added_in_local_env(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'app.env' => 'local',
+            'security-headers.vite.enabled' => true,
+            'security-headers.vite.dev_server' => 'http://127.0.0.1:5173',
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('ws://127.0.0.1:5173', $csp);
+    }
+
+    public function test_vite_not_added_in_production_env(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'app.env' => 'production',
+            'security-headers.vite.enabled' => true,
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringNotContainsString('127.0.0.1:5173', $csp);
+    }
+
+    // ---------------------------------------------------------------------------
+    // CSP directive details
+    // ---------------------------------------------------------------------------
+
+    public function test_csp_contains_frame_ancestors(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("frame-ancestors 'self'", $csp);
+    }
+
+    public function test_csp_custom_frame_ancestors(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.frame_ancestors' => ["'self'", 'https://portal.example.com'],
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('https://portal.example.com', $csp);
+    }
+
+    public function test_csp_contains_form_action(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("form-action 'self'", $csp);
+    }
+
+    public function test_csp_custom_style_src(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.style_src' => ['https://fonts.bunny.net'],
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('https://fonts.bunny.net', $csp);
+    }
+
+    public function test_csp_custom_font_src(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.font_src' => ['https://fonts.gstatic.com'],
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('https://fonts.gstatic.com', $csp);
+    }
+
+    public function test_hsts_without_include_subdomains(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.hsts.enabled' => true,
+            'security-headers.hsts.max_age' => 31536000,
+            'security-headers.hsts.include_subdomains' => false,
+        ]);
+
+        $hsts = $response->headers->get('Strict-Transport-Security');
+
+        $this->assertSame('max-age=31536000', $hsts);
+        $this->assertStringNotContainsString('includeSubDomains', $hsts);
+    }
+
+    public function test_csp_contains_base_uri(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("base-uri 'self'", $csp);
+    }
+
+    public function test_csp_contains_object_src_none(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString("object-src 'none'", $csp);
+    }
 }
