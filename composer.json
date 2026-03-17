@@ -1,14 +1,15 @@
 {
     "name": "philiprehberger/laravel-security-headers",
     "description": "Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy.",
-    "keywords": ["laravel", "security", "headers", "csp", "hsts", "middleware", "nonce"],
+    "keywords": ["laravel", "security", "headers", "csp", "hsts", "middleware"],
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/philiprehberger/laravel-security-headers",
     "authors": [
         {
             "name": "Philip Rehberger",
-            "email": "me@philiprehberger.com"
+            "email": "me@philiprehberger.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -19,7 +20,9 @@
     },
     "require-dev": {
         "laravel/pint": "^1.0",
+        "larastan/larastan": "^2.0|^3.0",
         "orchestra/testbench": "^9.0|^10.0",
+        "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^11.0"
     },
     "autoload": {
@@ -47,6 +50,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }
