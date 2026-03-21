@@ -8,10 +8,8 @@ Laravel middleware for comprehensive security headers including CSP with nonce s
 
 ## Requirements
 
-| Dependency | Version         |
-|------------|-----------------|
-| PHP        | ^8.2            |
-| Laravel    | 11 or 12        |
+- PHP 8.2+
+- Laravel 11 or 12
 
 ## Features
 
@@ -31,7 +29,9 @@ composer require philiprehberger/laravel-security-headers
 
 Laravel auto-discovery registers the service provider automatically.
 
-## Publishing the Config
+## Usage
+
+### Publishing the Config
 
 ```bash
 php artisan vendor:publish --tag=security-headers-config
@@ -39,9 +39,9 @@ php artisan vendor:publish --tag=security-headers-config
 
 This copies `config/security-headers.php` into your application's `config/` directory.
 
-## Registering the Middleware
+### Registering the Middleware
 
-### Laravel 11+ (bootstrap/app.php)
+#### Laravel 11+ (bootstrap/app.php)
 
 ```php
 use PhilipRehberger\SecurityHeaders\SecurityHeaders;
@@ -53,7 +53,7 @@ use PhilipRehberger\SecurityHeaders\SecurityHeaders;
 })
 ```
 
-### Laravel 10 and earlier (app/Http/Kernel.php)
+#### Laravel 10 and earlier (app/Http/Kernel.php)
 
 ```php
 protected $middlewareGroups = [
@@ -64,7 +64,7 @@ protected $middlewareGroups = [
 ];
 ```
 
-## Using the CSP Nonce in Blade
+### Using the CSP Nonce in Blade
 
 The nonce is shared to every view under the variable name configured in `csp.nonce_view_variable` (default: `cspNonce`).
 
@@ -78,13 +78,13 @@ The nonce is shared to every view under the variable name configured in `csp.non
 </style>
 ```
 
-### Accessing the Nonce in PHP
+#### Accessing the Nonce in PHP
 
 ```php
 $nonce = $request->attributes->get('csp_nonce');
 ```
 
-## Configuration Reference
+### Configuration Reference
 
 ```php
 // config/security-headers.php
@@ -131,7 +131,7 @@ return [
 ];
 ```
 
-## Hardening the CSP
+### Hardening the CSP
 
 By default, `'unsafe-eval'` is included in `script-src` and `'unsafe-inline'` is included in `style-src` for broad compatibility. You can disable these for stricter security:
 
@@ -144,7 +144,7 @@ By default, `'unsafe-eval'` is included in `script-src` and `'unsafe-inline'` is
 
 When `unsafe_inline` is disabled, all inline styles must use the CSP nonce. When `unsafe_eval` is disabled, `eval()` and related JavaScript features are blocked.
 
-### Hardcoded CSP Directives
+#### Hardcoded CSP Directives
 
 The following directives are always included and cannot be changed via config:
 
@@ -154,9 +154,9 @@ The following directives are always included and cannot be changed via config:
 | `base-uri` | `'self'` | Prevents `<base>` tag hijacking |
 | `object-src` | `'none'` | Blocks Flash/Java embeds |
 
-## Customization Examples
+### Customization Examples
 
-### Allow an external CDN for scripts
+#### Allow an external CDN for scripts
 
 ```php
 'csp' => [
@@ -164,7 +164,7 @@ The following directives are always included and cannot be changed via config:
 ],
 ```
 
-### Allow external font providers
+#### Allow external font providers
 
 ```php
 'csp' => [
@@ -173,7 +173,7 @@ The following directives are always included and cannot be changed via config:
 ],
 ```
 
-### Allow WebSocket connections to a production server
+#### Allow WebSocket connections to a production server
 
 ```php
 'csp' => [
@@ -181,7 +181,7 @@ The following directives are always included and cannot be changed via config:
 ],
 ```
 
-### Allow forms to post to a subdomain
+#### Allow forms to post to a subdomain
 
 ```php
 'csp' => [
@@ -189,13 +189,13 @@ The following directives are always included and cannot be changed via config:
 ],
 ```
 
-### Enable HSTS in production via environment variable
+#### Enable HSTS in production via environment variable
 
 ```env
 SECURITY_HEADERS_HSTS=true
 ```
 
-### Remove a header you do not need
+#### Remove a header you do not need
 
 ```php
 'x_xss_protection' => null,
