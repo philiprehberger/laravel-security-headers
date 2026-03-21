@@ -1,6 +1,6 @@
 {
     "name": "philiprehberger/laravel-security-headers",
-    "description": "Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy.",
+    "description": "Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy",
     "keywords": ["laravel", "security", "headers", "csp", "hsts", "middleware"],
     "type": "library",
     "license": "MIT",
