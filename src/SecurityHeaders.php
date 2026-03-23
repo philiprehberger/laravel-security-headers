@@ -41,7 +41,11 @@ class SecurityHeaders
 
         // Content Security Policy
         if (config('security-headers.csp.enabled', true)) {
-            $response->headers->set('Content-Security-Policy', $this->buildCsp($nonce));
+            $headerName = config('security-headers.csp.report_only', false)
+                ? 'Content-Security-Policy-Report-Only'
+                : 'Content-Security-Policy';
+
+            $response->headers->set($headerName, $this->buildCsp($nonce));
         }
 
         // X-Content-Type-Options
