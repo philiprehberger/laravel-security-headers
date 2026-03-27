@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/laravel-security-headers/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/laravel-security-headers.svg)](https://packagist.org/packages/philiprehberger/laravel-security-headers)
 [![License](https://img.shields.io/github/license/philiprehberger/laravel-security-headers)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Laravel middleware for comprehensive security headers including CSP with nonce support, HSTS, and Permissions-Policy.
 
