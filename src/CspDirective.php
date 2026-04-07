@@ -16,4 +16,5 @@ enum CspDirective: string
     case FrameSrc = 'frame-src';
     case BaseUri = 'base-uri';
     case FormAction = 'form-action';
+    case FrameAncestors = 'frame-ancestors';
 }

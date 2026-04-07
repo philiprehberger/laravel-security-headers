@@ -73,6 +73,11 @@ class SecurityHeaders
             $response->headers->set('Permissions-Policy', $value);
         }
 
+        // X-Permitted-Cross-Domain-Policies
+        if (($value = config('security-headers.permitted_cross_domain_policies', 'none')) !== null && $value !== false) {
+            $response->headers->set('X-Permitted-Cross-Domain-Policies', (string) $value);
+        }
+
         return $response;
     }
 
@@ -127,6 +132,14 @@ class SecurityHeaders
             "base-uri 'self'",
             "object-src 'none'",
         ];
+
+        if (($reportUri = config('security-headers.csp.report_uri')) !== null && $reportUri !== '') {
+            $directives[] = 'report-uri '.$reportUri;
+        }
+
+        if (($reportTo = config('security-headers.csp.report_to')) !== null && $reportTo !== '') {
+            $directives[] = 'report-to '.$reportTo;
+        }
 
         return implode('; ', $directives);
     }

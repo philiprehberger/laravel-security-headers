@@ -105,14 +105,19 @@ return [
         'connect_src'  => [],   // appended to: 'self'
         'frame_ancestors' => ["'self'"],
         'form_action'     => ["'self'"],
+
+        // Optional CSP reporting (omitted when null)
+        'report_uri' => null, // appended as `report-uri <uri>`
+        'report_to'  => null, // appended as `report-to <group>`
     ],
 
     // Set to null to omit the header entirely
-    'x_content_type_options' => 'nosniff',
-    'x_frame_options'        => 'SAMEORIGIN',
-    'x_xss_protection'       => '1; mode=block',
-    'referrer_policy'        => 'strict-origin-when-cross-origin',
-    'permissions_policy'     => 'geolocation=(), camera=(), microphone=(), payment=()',
+    'x_content_type_options'         => 'nosniff',
+    'x_frame_options'                => 'SAMEORIGIN',
+    'x_xss_protection'               => '1; mode=block',
+    'referrer_policy'                => 'strict-origin-when-cross-origin',
+    'permissions_policy'             => 'geolocation=(), camera=(), microphone=(), payment=()',
+    'permitted_cross_domain_policies' => 'none', // X-Permitted-Cross-Domain-Policies (null/false to omit)
 
     'vite' => [
         'enabled'    => true,
@@ -196,6 +201,25 @@ SECURITY_HEADERS_HSTS=true
 
 When `report_only` is `true`, the middleware sends `Content-Security-Policy-Report-Only` instead of `Content-Security-Policy`. This lets browsers report violations without blocking resources, which is useful when rolling out a new policy.
 
+#### Send CSP violation reports to an endpoint
+
+```php
+'csp' => [
+    'report_uri' => 'https://example.com/csp-report',
+    'report_to'  => 'csp-endpoint',
+],
+```
+
+When set, `report-uri <uri>` and/or `report-to <group>` are appended to the CSP header. Both are omitted by default.
+
+#### Configure X-Permitted-Cross-Domain-Policies
+
+```php
+'permitted_cross_domain_policies' => 'none', // default
+```
+
+Controls the `X-Permitted-Cross-Domain-Policies` header which restricts Adobe Flash/PDF cross-domain policy files. Set to `null` or `false` to omit the header.
+
 #### Use the CspDirective enum for type-safe directive names
 
 ```php
@@ -223,7 +247,7 @@ $directive = CspDirective::from('style-src'); // CspDirective::StyleSrc
 
 | Enum | Description |
 |------|-------------|
-| `CspDirective` | Backed string enum with cases for common CSP directives (`DefaultSrc`, `ScriptSrc`, `StyleSrc`, `ImgSrc`, `FontSrc`, `ConnectSrc`, `MediaSrc`, `FrameSrc`, `BaseUri`, `FormAction`) |
+| `CspDirective` | Backed string enum with cases for common CSP directives (`DefaultSrc`, `ScriptSrc`, `StyleSrc`, `ImgSrc`, `FontSrc`, `ConnectSrc`, `MediaSrc`, `FrameSrc`, `BaseUri`, `FormAction`, `FrameAncestors`) |
 
 ### Service Provider
 
