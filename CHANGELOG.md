@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-04-06
+
+### Added
+- `CspDirective::FrameAncestors` enum case for `frame-ancestors`
+- `X-Permitted-Cross-Domain-Policies` header support (default `none`, configurable via `permitted_cross_domain_policies` config key, omitted when `null` or `false`)
+- Optional `csp.report_uri` config key — when set, appends `report-uri <uri>` to the CSP header
+- Optional `csp.report_to` config key — when set, appends `report-to <group>` to the CSP header
+- Tests covering new enum cases, the cross-domain-policies header, CSP reporting directives, and a custom `nonce_view_variable`
+
 ## [1.2.2] - 2026-03-31
 
 ### Changed

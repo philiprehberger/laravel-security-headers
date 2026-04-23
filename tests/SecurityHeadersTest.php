@@ -382,6 +382,13 @@ class SecurityHeadersTest extends TestCase
         $this->assertSame('frame-src', CspDirective::FrameSrc->value);
         $this->assertSame('base-uri', CspDirective::BaseUri->value);
         $this->assertSame('form-action', CspDirective::FormAction->value);
+        $this->assertSame('frame-ancestors', CspDirective::FrameAncestors->value);
+    }
+
+    public function test_csp_directive_enum_frame_ancestors_from_string(): void
+    {
+        $this->assertSame(CspDirective::FrameAncestors, CspDirective::from('frame-ancestors'));
+        $this->assertSame(CspDirective::FormAction, CspDirective::from('form-action'));
     }
 
     public function test_csp_directive_enum_is_backed_string(): void
@@ -425,5 +432,93 @@ class SecurityHeadersTest extends TestCase
 
         $this->assertStringContainsString("default-src 'self'", $csp);
         $this->assertStringContainsString("script-src 'self'", $csp);
+    }
+
+    // ---------------------------------------------------------------------------
+    // X-Permitted-Cross-Domain-Policies
+    // ---------------------------------------------------------------------------
+
+    public function test_sets_permitted_cross_domain_policies_default_none(): void
+    {
+        $response = $this->handle($this->makeRequest());
+
+        $this->assertSame('none', $response->headers->get('X-Permitted-Cross-Domain-Policies'));
+    }
+
+    public function test_permitted_cross_domain_policies_customizable(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.permitted_cross_domain_policies' => 'master-only',
+        ]);
+
+        $this->assertSame('master-only', $response->headers->get('X-Permitted-Cross-Domain-Policies'));
+    }
+
+    public function test_permitted_cross_domain_policies_omitted_when_null(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.permitted_cross_domain_policies' => null,
+        ]);
+
+        $this->assertNull($response->headers->get('X-Permitted-Cross-Domain-Policies'));
+    }
+
+    public function test_permitted_cross_domain_policies_omitted_when_false(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.permitted_cross_domain_policies' => false,
+        ]);
+
+        $this->assertNull($response->headers->get('X-Permitted-Cross-Domain-Policies'));
+    }
+
+    // ---------------------------------------------------------------------------
+    // CSP report_uri / report_to
+    // ---------------------------------------------------------------------------
+
+    public function test_csp_includes_report_uri_when_set(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.report_uri' => 'https://example.com/csp-report',
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('report-uri https://example.com/csp-report', $csp);
+    }
+
+    public function test_csp_includes_report_to_when_set(): void
+    {
+        $response = $this->handle($this->makeRequest(), [
+            'security-headers.csp.report_to' => 'csp-endpoint',
+        ]);
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('report-to csp-endpoint', $csp);
+    }
+
+    public function test_csp_omits_report_directives_by_default(): void
+    {
+        $response = $this->handle($this->makeRequest());
+        $csp = $response->headers->get('Content-Security-Policy');
+
+        $this->assertStringNotContainsString('report-uri', $csp);
+        $this->assertStringNotContainsString('report-to', $csp);
+    }
+
+    // ---------------------------------------------------------------------------
+    // Custom nonce_view_variable
+    // ---------------------------------------------------------------------------
+
+    public function test_custom_nonce_view_variable(): void
+    {
+        $request = $this->makeRequest();
+        $this->handle($request, [
+            'security-headers.csp.nonce_view_variable' => 'myNonce',
+        ]);
+
+        $shared = app('view')->getShared();
+
+        $this->assertArrayHasKey('myNonce', $shared);
+        $this->assertNotEmpty($shared['myNonce']);
     }
 }

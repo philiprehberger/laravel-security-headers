@@ -72,6 +72,12 @@ return [
 
         // form-action directive restricts where forms may submit
         'form_action' => ["'self'"],
+
+        // Optional CSP reporting endpoint (appended as `report-uri <uri>`)
+        'report_uri' => null,
+
+        // Optional CSP reporting group name (appended as `report-to <group>`)
+        'report_to' => null,
     ],
 
     /*
@@ -91,6 +97,9 @@ return [
     'referrer_policy' => 'strict-origin-when-cross-origin',
 
     'permissions_policy' => 'geolocation=(), camera=(), microphone=(), payment=()',
+
+    // X-Permitted-Cross-Domain-Policies (set to null or false to omit)
+    'permitted_cross_domain_policies' => 'none',
 
     /*
     |--------------------------------------------------------------------------
